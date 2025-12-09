@@ -1,0 +1,214 @@
+# Truyen - Story Management API
+
+## 📖 Giới thiệu
+
+Truyen là một ứng dụng RESTful API được xây dựng bằng Spring Boot để quản lý truyện, chương, bình luận, lịch sử đọc và các tính năng liên quan. Dự án sử dụng PostgreSQL làm cơ sở dữ liệu và tích hợp Spring Security để bảo mật.
+
+## 🚀 Công nghệ sử dụng
+
+- **Java**: 21
+- **Spring Boot**: 3.3.5
+- **Spring Data JPA**: Quản lý dữ liệu
+- **Spring Security**: Bảo mật ứng dụng
+- **Spring Validation**: Xác thực dữ liệu
+- **PostgreSQL**: Cơ sở dữ liệu
+- **Lombok**: Giảm boilerplate code
+- **SpringDoc OpenAPI**: Tài liệu API (Swagger UI)
+- **Maven**: Quản lý dependencies
+
+## 📋 Yêu cầu hệ thống
+
+- Java Development Kit (JDK) 21 trở lên
+- Maven 3.6+
+- PostgreSQL 12+
+- IDE: IntelliJ IDEA, Eclipse, hoặc VS Code
+
+## ⚙️ Cài đặt
+
+### 1. Clone repository
+
+```bash
+git clone <repository-url>
+cd truyen
+```
+
+### 2. Cấu hình Database
+
+Tạo database PostgreSQL:
+
+```sql
+CREATE DATABASE sangtacviet;
+```
+
+### 3. Cấu hình application.properties
+
+Cập nhật file `src/main/resources/application.properties`:
+
+```properties
+# Database Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/sangtacviet
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+
+# Server Port
+server.port=8088
+
+# Google AI Configuration (Optional)
+spring.ai.google.genai.api-key=YOUR_GOOGLE_API_KEY
+spring.ai.google.genai.project-id=YOUR_GOOGLE_PROJECT_ID
+spring.ai.google.genai.location=us-central1
+```
+
+### 4. Build và chạy ứng dụng
+
+```bash
+# Build project
+./mvnw clean install
+
+# Chạy ứng dụng
+./mvnw spring-boot:run
+```
+
+Hoặc trên Windows:
+
+```bash
+mvnw.cmd clean install
+mvnw.cmd spring-boot:run
+```
+
+Ứng dụng sẽ chạy tại: `http://localhost:8088`
+
+## 📚 API Documentation
+
+Sau khi chạy ứng dụng, truy cập Swagger UI tại:
+
+```
+http://localhost:8088/swagger-ui.html
+```
+
+## 🏗️ Cấu trúc dự án
+
+```
+src/
+├── main/
+│   ├── java/com/search/truyen/
+│   │   ├── config/          # Cấu hình Spring
+│   │   ├── controller/      # REST Controllers
+│   │   │   ├── ChapterController.java
+│   │   │   ├── CommentController.java
+│   │   │   ├── HistoryController.java
+│   │   │   ├── StoryController.java
+│   │   │   ├── TagController.java
+│   │   │   ├── TaglogController.java
+│   │   │   └── UserController.java
+│   │   ├── dtos/            # Data Transfer Objects
+│   │   ├── enums/           # Enumerations
+│   │   ├── model/           # Entity Models
+│   │   │   └── entities/
+│   │   │       ├── Chapter.java
+│   │   │       ├── Comment.java
+│   │   │       ├── History.java
+│   │   │       ├── Page.java
+│   │   │       ├── Recommend_log.java
+│   │   │       ├── Story.java
+│   │   │       ├── Story_tag.java
+│   │   │       ├── Tag.java
+│   │   │       ├── Tag_log.java
+│   │   │       └── User.java
+│   │   ├── repository/      # JPA Repositories
+│   │   ├── service/         # Business Logic
+│   │   └── TruyenApplication.java
+│   └── resources/
+│       └── application.properties
+└── test/                    # Unit & Integration Tests
+```
+
+## 🔑 Các tính năng chính
+
+### 1. **Quản lý Truyện (Story)**
+- Tạo, đọc, cập nhật, xóa truyện
+- Tìm kiếm và lọc truyện
+
+### 2. **Quản lý Chương (Chapter)**
+- Quản lý các chương của truyện
+- Phân trang nội dung
+
+### 3. **Quản lý Bình luận (Comment)**
+- Thêm, sửa, xóa bình luận
+- Bình luận theo truyện/chương
+
+### 4. **Lịch sử đọc (History)**
+- Theo dõi lịch sử đọc của người dùng
+- Lưu vị trí đọc
+
+### 5. **Quản lý Tag**
+- Phân loại truyện theo tag
+- Tìm kiếm theo tag
+
+### 6. **Quản lý User**
+- Đăng ký, đăng nhập
+- Xác thực và phân quyền
+
+## 🧪 Testing
+
+Chạy tests:
+
+```bash
+./mvnw test
+```
+
+Dự án bao gồm:
+- Unit tests cho Service layer
+- Integration tests cho Controller layer
+
+## 🔒 Bảo mật
+
+- Spring Security được tích hợp để bảo vệ các endpoints
+- Xác thực và phân quyền người dùng
+- Validation dữ liệu đầu vào
+
+## 📝 Database Schema
+
+Dự án sử dụng các bảng chính:
+- `users` - Thông tin người dùng
+- `stories` - Thông tin truyện
+- `chapters` - Các chương của truyện
+- `pages` - Nội dung từng trang
+- `comments` - Bình luận
+- `history` - Lịch sử đọc
+- `tags` - Thẻ phân loại
+- `story_tag` - Liên kết truyện và tag
+- `tag_log` - Nhật ký tag
+- `recommend_log` - Nhật ký đề xuất
+
+## 🤝 Đóng góp
+
+Mọi đóng góp đều được hoan nghênh! Vui lòng:
+
+1. Fork repository
+2. Tạo branch mới (`git checkout -b feature/AmazingFeature`)
+3. Commit thay đổi (`git commit -m 'Add some AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Tạo Pull Request
+
+## 📄 License
+
+Dự án này được phát hành dưới giấy phép [MIT License](LICENSE).
+
+## 👥 Tác giả
+
+- **Your Name** - *Initial work*
+
+## 📞 Liên hệ
+
+Nếu có bất kỳ câu hỏi nào, vui lòng liên hệ qua:
+- Email: your.email@example.com
+- GitHub: [@yourusername](https://github.com/yourusername)
+
+---
+
+⭐ Nếu bạn thấy dự án hữu ích, hãy cho một star nhé!
