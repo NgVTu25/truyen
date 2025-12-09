@@ -199,16 +199,4 @@ Mọi đóng góp đều được hoan nghênh! Vui lòng:
 
 Dự án này được phát hành dưới giấy phép [MIT License](LICENSE).
 
-## 👥 Tác giả
-
-- **Your Name** - *Initial work*
-
-## 📞 Liên hệ
-
-Nếu có bất kỳ câu hỏi nào, vui lòng liên hệ qua:
-- Email: your.email@example.com
-- GitHub: [@yourusername](https://github.com/yourusername)
-
----
-
 ⭐ Nếu bạn thấy dự án hữu ích, hãy cho một star nhé!
