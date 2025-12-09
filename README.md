@@ -82,14 +82,6 @@ mvnw.cmd spring-boot:run
 
 Ứng dụng sẽ chạy tại: `http://localhost:8088`
 
-## 📚 API Documentation
-
-Sau khi chạy ứng dụng, truy cập Swagger UI tại:
-
-```
-http://localhost:8088/swagger-ui.html
-```
-
 ### API Endpoints
 
 #### 1. **Story API** (`/api/stories`)
