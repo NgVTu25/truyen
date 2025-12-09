@@ -90,6 +90,120 @@ Sau khi chạy ứng dụng, truy cập Swagger UI tại:
 http://localhost:8088/swagger-ui.html
 ```
 
+### API Endpoints
+
+#### 1. **Story API** (`/api/stories`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/stories/create` | Tạo truyện mới | storyDTO |
+| PUT | `/api/stories/update/{id}` | Cập nhật truyện | storyDTO |
+| DELETE | `/api/stories/delete/{id}` | Xóa truyện | - |
+| GET | `/api/stories/get/{id}` | Lấy truyện theo ID | - |
+| GET | `/api/stories/search?title={title}` | Tìm truyện theo tên | - |
+| GET | `/api/stories/get_all` | Lấy tất cả truyện | - |
+
+#### 2. **Chapter API** (`/api/chapters`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/chapters/create` | Tạo chương mới | ChapterDTO |
+| PUT | `/api/chapters/update/{id}` | Cập nhật chương | ChapterDTO |
+| DELETE | `/api/chapters/delete/{id}` | Xóa chương | - |
+| GET | `/api/chapters/get/{id}` | Lấy chương theo ID | - |
+| GET | `/api/chapters/get_all` | Lấy tất cả chương | - |
+| GET | `/api/chapters/story/{storyId}` | Lấy các chương của truyện | - |
+| GET | `/api/chapters/story/{storyId}/number/{chapterNumber}` | Lấy chương theo số thứ tự | - |
+| GET | `/api/chapters/search?title={title}` | Tìm chương theo tên | - |
+
+#### 3. **Comment API** (`/api/comments`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/comments/create` | Tạo bình luận mới | CommentDTO |
+| PUT | `/api/comments/update/{id}` | Cập nhật bình luận | CommentDTO |
+| DELETE | `/api/comments/delete/{id}` | Xóa bình luận | - |
+| GET | `/api/comments/get/{id}` | Lấy bình luận theo ID | - |
+| GET | `/api/comments/get_all` | Lấy tất cả bình luận | - |
+| GET | `/api/comments/story/{storyId}` | Lấy bình luận của truyện | - |
+| GET | `/api/comments/chapter/{chapterId}` | Lấy bình luận của chương | - |
+| GET | `/api/comments/user/{userId}` | Lấy bình luận của user | - |
+
+#### 4. **History API** (`/api/history`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/history/save` | Lưu/Cập nhật lịch sử đọc | HistoryDTO |
+| DELETE | `/api/history/delete/{id}` | Xóa lịch sử | - |
+| GET | `/api/history/get/{id}` | Lấy lịch sử theo ID | - |
+| GET | `/api/history/get_all` | Lấy tất cả lịch sử | - |
+| GET | `/api/history/user/{userId}` | Lấy lịch sử của user | - |
+| GET | `/api/history/story/{storyId}` | Lấy lịch sử của truyện | - |
+| GET | `/api/history/user/{userId}/story/{storyId}` | Lấy lịch sử user đọc truyện | - |
+
+#### 5. **User API** (`/api/user`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/user/register` | Đăng ký user mới | userDTO |
+| POST | `/api/user/login` | Đăng nhập | LoginRequest |
+| GET | `/api/user/name/{username}` | Lấy user theo username | - |
+| GET | `/api/user/id/{id}` | Lấy user theo ID | - |
+
+#### 6. **Tag API** (`/api/tags`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/tags/create` | Tạo tag mới | tagDTO |
+| PUT | `/api/tags/update/{id}` | Cập nhật tag | tagDTO |
+| DELETE | `/api/tags/delete/{id}` | Xóa tag | tagDTO |
+| GET | `/api/tags/get/{id}` | Lấy tag theo ID | - |
+| GET | `/api/tags/get_all` | Lấy tất cả tag | - |
+
+#### 7. **Tag Log API** (`/api/tag_log`)
+
+| Method | Endpoint | Mô tả | Request Body |
+|--------|----------|-------|--------------|
+| POST | `/api/tag_log/create` | Tạo tag log mới | TaglogDTO |
+| PUT | `/api/tag_log/update/{id}` | Cập nhật tag log | TaglogDTO |
+| DELETE | `/api/tag_log/delete/{id}` | Xóa tag log | TaglogDTO |
+| GET | `/api/tag_log/get/{id}` | Lấy tag log theo ID | - |
+| GET | `/api/tag_log/get_all` | Lấy tất cả tag log | - |
+
+### Request/Response Examples
+
+#### Tạo truyện mới
+```json
+POST /api/stories/create
+{
+  "title": "Tên truyện",
+  "description": "Mô tả truyện",
+  "chapters": 10,
+  "tags": "fantasy,adventure",
+  "coverImage": "url_to_image",
+  "type": "novel"
+}
+```
+
+#### Đăng ký user
+```json
+POST /api/user/register
+{
+  "username": "user123",
+  "password": "password123",
+  "email": "user@example.com"
+}
+```
+
+#### Đăng nhập
+```json
+POST /api/user/login
+{
+  "username": "user123",
+  "password": "password123"
+}
+```
+
 ## 🏗️ Cấu trúc dự án
 
 ```
