@@ -3,6 +3,7 @@ package com.search.truyen.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.search.truyen.dtos.ChapterDTO;
@@ -19,19 +20,13 @@ public class ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final storyRepository storyRepository;
+    private final ModelMapper modelMapper ;
 
-    public Chapter createChapter(ChapterDTO chapterDTO) {
+    public Chapter createChapter(Long id, ChapterDTO chapterDTO) {
         Story story = storyRepository.findById(chapterDTO.getStoryId())
-                .orElseThrow(() -> new RuntimeException("Story not found with id: " + chapterDTO.getStoryId()));
-
-        Chapter chapter = Chapter.builder()
-                .title(chapterDTO.getTitle())
-                .chapterNumber(chapterDTO.getChapterNumber())
-                .story(story)
-                .pages(chapterDTO.getPages())
-                .content(chapterDTO.getContent())
-                .build();
-
+                .orElseThrow(() -> new RuntimeException("Story not found with id: " + id));
+        Chapter chapter = new Chapter();
+        modelMapper.map(chapterDTO, chapter);
         return chapterRepository.save(chapter);
     }
 

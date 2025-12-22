@@ -24,7 +24,7 @@ public class StoryService {
                 .coverImage(storyDto.getCoverImage())
                 .type(storyDto.getType())
                 .build();
-        return java.util.Objects.requireNonNull(storyRepository.save(story));
+        return storyRepository.save(story);
     }
 
     public Optional<Story> getStoryById(@NonNull Long id) {

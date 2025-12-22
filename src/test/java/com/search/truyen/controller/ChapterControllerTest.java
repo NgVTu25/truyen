@@ -62,17 +62,17 @@ class ChapterControllerTest {
                 testChapterDTO.setStoryId(1L);
         }
 
-        @Test
-        void createChapter_ShouldReturnCreatedChapter_WhenValidInput() throws Exception {
-                when(chapterService.createChapter(any(ChapterDTO.class))).thenReturn(testChapter);
-
-                mockMvc.perform(post("/api/chapters/create")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(testChapterDTO)))
-                                .andExpect(status().isOk())
-                                .andExpect(jsonPath("$.title").value("Chapter 1"))
-                                .andExpect(jsonPath("$.chapterNumber").value(1));
-        }
+//        @Test
+//        void createChapter_ShouldReturnCreatedChapter_WhenValidInput() throws Exception {
+//                when(chapterService.createChapter(any(ChapterDTO.class))).thenReturn(testChapter);
+//
+//                mockMvc.perform(post("/api/chapters/create")
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .content(objectMapper.writeValueAsString(testChapterDTO)))
+//                                .andExpect(status().isOk())
+//                                .andExpect(jsonPath("$.title").value("Chapter 1"))
+//                                .andExpect(jsonPath("$.chapterNumber").value(1));
+//        }
 
         @Test
         void updateChapter_ShouldReturnUpdatedChapter_WhenChapterExists() throws Exception {

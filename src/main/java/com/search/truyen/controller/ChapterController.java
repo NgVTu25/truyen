@@ -19,9 +19,9 @@ public class ChapterController {
 
     private final ChapterService chapterService;
 
-    @PostMapping("/create")
-    public ResponseEntity<ChapterDTO> createChapter(@RequestBody ChapterDTO chapterDTO) {
-        Chapter createdChapter = chapterService.createChapter(chapterDTO);
+    @PostMapping("/create/{id}")
+    public ResponseEntity<ChapterDTO> createChapter(@RequestBody @PathVariable Long id, ChapterDTO chapterDTO) {
+        Chapter createdChapter = chapterService.createChapter(id, chapterDTO);
         return ResponseEntity.ok(mapToDTO(createdChapter));
     }
 

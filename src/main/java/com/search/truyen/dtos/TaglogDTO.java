@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 import com.search.truyen.model.entities.Story;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-
 public class TaglogDTO {
 
     private long id;

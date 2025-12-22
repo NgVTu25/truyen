@@ -3,6 +3,8 @@ package com.search.truyen.model.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.search.truyen.enums.Userrole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +24,11 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @NotBlank(message = "Username không được để trống")
     @Column(name = "username", nullable = false, length = 128)
     private String username;
 
+    @Email(message = "Email không hợp lệ")
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -51,14 +55,6 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updateAt = LocalDateTime.now();
-    }
-
-    public void setRole(Userrole role) {
-        this.role = role;
-    }
-
-    public void setPasswordHash(String encodedPassword) {
-        this.password = encodedPassword;
     }
 
 }
