@@ -1,15 +1,14 @@
 package com.search.truyen.service;
 
-import com.search.truyen.repository.UserRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
 import com.search.truyen.dtos.TaglogDTO;
 import com.search.truyen.model.entities.Tag_log;
 import com.search.truyen.repository.tag_logRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -17,31 +16,32 @@ public class Tag_logService {
     private final tag_logRepository tag_logRepository;
     private final ModelMapper modelMapper;
 
-    public Tag_log createTag_log(TaglogDTO tag_log) {
-        Tag_log tag_logEntity = new Tag_log();
-        modelMapper.map(tag_log, tag_logEntity);
-        return tag_logRepository.save(tag_logEntity);
+    public TaglogDTO createTag_log(TaglogDTO taglogDTO) {
+        Tag_log entity = modelMapper.map(taglogDTO, Tag_log.class);
+        return modelMapper.map(tag_logRepository.save(entity), TaglogDTO.class);
     }
 
-    public Tag_log updateTag_log(TaglogDTO tag_log) {
-        Tag_log tag_logEntity = tag_logRepository.findById(tag_log.getId())
-                .orElseThrow(() -> new RuntimeException("Tag_log not found with id: " + tag_log.getId()));
-        modelMapper.map(tag_log, tag_logEntity);
-        return tag_logRepository.save(tag_logEntity);
+    public TaglogDTO updateTag_log(Long id, TaglogDTO taglogDTO) {
+        Tag_log entity = tag_logRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag_log not found"));
+        modelMapper.map(taglogDTO, entity);
+        entity.setId(id);
+        return modelMapper.map(tag_logRepository.save(entity), TaglogDTO.class);
     }
 
-    public void deleteTag_log(TaglogDTO tag_log) {
-        if (!tag_logRepository.existsById(tag_log.getId())) {
-            throw new RuntimeException("Tag_log not found with id: " + tag_log.getId());
-        }
-        tag_logRepository.deleteById(tag_log.getId());
+    public void deleteTag_log(Long id) {
+        if (!tag_logRepository.existsById(id)) throw new RuntimeException("Tag_log not found");
+        tag_logRepository.deleteById(id);
     }
 
-    public Tag_log getTag_logById(TaglogDTO tag_log) {
-        return tag_logRepository.findById(tag_log.getId()).orElse(null);
+    public Optional<TaglogDTO> getTag_logById(Long id) {
+        return tag_logRepository.findById(id)
+                .map(t -> modelMapper.map(t, TaglogDTO.class));
     }
 
-    public List<Tag_log> getAllTag_logs() {
-        return tag_logRepository.findAll();
+    public List<TaglogDTO> getAllTag_logs() {
+        return tag_logRepository.findAll().stream()
+                .map(t -> modelMapper.map(t, TaglogDTO.class))
+                .collect(Collectors.toList());
     }
 }

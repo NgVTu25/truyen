@@ -10,5 +10,4 @@ import com.search.truyen.model.entities.Tag_log;
 
 @Repository
 public interface tag_logRepository extends JpaRepository<Tag_log, Long> {
-    Optional<Tag_log> findByStory(Story story);
 }

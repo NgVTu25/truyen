@@ -1,14 +1,11 @@
 package com.search.truyen.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
-import lombok.RequiredArgsConstructor;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.search.truyen.dtos.TaglogDTO;
-import com.search.truyen.model.entities.Tag_log;
 import com.search.truyen.service.Tag_logService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,29 +14,30 @@ public class TaglogController {
     private final Tag_logService tag_logService;
 
     @PostMapping("/create")
-    public Tag_log createTag_log(@RequestBody TaglogDTO tag_log) {
-        return tag_logService.createTag_log(tag_log);
+    public ResponseEntity<TaglogDTO> createTag_log(@RequestBody TaglogDTO taglogDTO) {
+        return ResponseEntity.ok(tag_logService.createTag_log(taglogDTO));
     }
 
     @PutMapping("/update/{id}")
-    public Tag_log updateTag_log(@RequestBody TaglogDTO tag_log) {
-        return tag_logService.updateTag_log(tag_log);
+    public ResponseEntity<TaglogDTO> updateTag_log(@PathVariable Long id, @RequestBody TaglogDTO taglogDTO) {
+        return ResponseEntity.ok(tag_logService.updateTag_log(id, taglogDTO));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTag_log(@RequestBody TaglogDTO tag_log) {
-        tag_logService.deleteTag_log(tag_log);
+    public ResponseEntity<Void> deleteTag_log(@PathVariable Long id) {
+        tag_logService.deleteTag_log(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/get/{id}")
-    public Tag_log getTag_logById(@PathVariable Long id) {
-        TaglogDTO dto = new TaglogDTO();
-        dto.setId(id);
-        return tag_logService.getTag_logById(dto);
+    public ResponseEntity<TaglogDTO> getTag_logById(@PathVariable Long id) {
+        return tag_logService.getTag_logById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new RuntimeException("Tag_log not found"));
     }
 
     @GetMapping("/get_all")
-    public List<Tag_log> getAllTag_logs() {
-        return tag_logService.getAllTag_logs();
+    public ResponseEntity<List<TaglogDTO>> getAllTag_logs() {
+        return ResponseEntity.ok(tag_logService.getAllTag_logs());
     }
 }

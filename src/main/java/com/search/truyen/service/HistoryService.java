@@ -2,82 +2,76 @@ package com.search.truyen.service;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import com.search.truyen.dtos.HistoryDTO;
-import com.search.truyen.model.entities.Chapter;
-import com.search.truyen.model.entities.History;
-import com.search.truyen.model.entities.Story;
-import com.search.truyen.model.entities.User;
-import com.search.truyen.repository.ChapterRepository;
-import com.search.truyen.repository.HistoryRepository;
-import com.search.truyen.repository.UserRepository;
-import com.search.truyen.repository.storyRepository;
-
+import com.search.truyen.model.entities.*;
+import com.search.truyen.repository.*;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class HistoryService {
-
     private final HistoryRepository historyRepository;
     private final UserRepository userRepository;
     private final storyRepository storyRepository;
     private final ChapterRepository chapterRepository;
     private final ModelMapper modelMapper;
 
-    public History createOrUpdateHistory(HistoryDTO historyDTO) {
+    public HistoryDTO createOrUpdateHistory(HistoryDTO historyDTO) {
         User user = userRepository.findById(historyDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + historyDTO.getUserId()));
-
+                .orElseThrow(() -> new RuntimeException("User not found"));
         Story story = storyRepository.findById(historyDTO.getStoryId())
-                .orElseThrow(() -> new RuntimeException("Story not found with id: " + historyDTO.getStoryId()));
-
+                .orElseThrow(() -> new RuntimeException("Story not found"));
         Chapter chapter = chapterRepository.findById(historyDTO.getChapterId())
-                .orElseThrow(() -> new RuntimeException("Chapter not found with id: " + historyDTO.getChapterId()));
+                .orElseThrow(() -> new RuntimeException("Chapter not found"));
 
         Optional<History> existingHistory = historyRepository.findByUserIdAndStoryId(
                 historyDTO.getUserId(), historyDTO.getStoryId());
 
-        History history = new History();
-        if (existingHistory.isPresent()) {
-            history = existingHistory.get();
-            history.setChapter(chapter);
-            history.setLastPage(historyDTO.getLastPage());
-        } else {
-            // Create new history
-            modelMapper.map(historyDTO, history);
+        History history = existingHistory.orElseGet(History::new);
+        if (history.getId() == null) {
+            history.setUser(user);
+            history.setStory(story);
         }
 
-        return historyRepository.save(history);
+        history.setChapter(chapter);
+        history.setLastPage(historyDTO.getLastPage());
+
+        return modelMapper.map(historyRepository.save(history), HistoryDTO.class);
     }
 
     public void deleteHistory(Long id) {
-        if (!historyRepository.existsById(id)) {
-            throw new RuntimeException("History not found with id: " + id);
-        }
+        if (!historyRepository.existsById(id)) throw new RuntimeException("History not found");
         historyRepository.deleteById(id);
     }
 
-    public Optional<History> getHistoryById(Long id) {
-        return historyRepository.findById(id);
+    public Optional<HistoryDTO> getHistoryById(Long id) {
+        return historyRepository.findById(id)
+                .map(h -> modelMapper.map(h, HistoryDTO.class));
     }
 
-    public List<History> getAllHistories() {
-        return historyRepository.findAll();
+    public List<HistoryDTO> getAllHistories() {
+        return historyRepository.findAll().stream()
+                .map(h -> modelMapper.map(h, HistoryDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<History> getHistoriesByUserId(Long userId) {
-        return historyRepository.findByUserIdOrderByLastReadDesc(userId);
+    public List<HistoryDTO> getHistoriesByUserId(Long userId) {
+        return historyRepository.findByUserIdOrderByLastReadDesc(userId).stream()
+                .map(h -> modelMapper.map(h, HistoryDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public List<History> getHistoriesByStoryId(Long storyId) {
-        return historyRepository.findByStoryId(storyId);
+    public List<HistoryDTO> getHistoriesByStoryId(Long storyId) {
+        return historyRepository.findByStoryId(storyId).stream()
+                .map(h -> modelMapper.map(h, HistoryDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Optional<History> getHistoryByUserIdAndStoryId(Long userId, Long storyId) {
-        return historyRepository.findByUserIdAndStoryId(userId, storyId);
+    public Optional<HistoryDTO> getHistoryByUserIdAndStoryId(Long userId, Long storyId) {
+        return historyRepository.findByUserIdAndStoryId(userId, storyId)
+                .map(h -> modelMapper.map(h, HistoryDTO.class));
     }
 }

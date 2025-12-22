@@ -1,14 +1,11 @@
 package com.search.truyen.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
-
 import com.search.truyen.service.TagService;
 import com.search.truyen.dtos.tagDTO;
-import com.search.truyen.model.entities.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,44 +14,28 @@ public class TagController {
     private final TagService tagService;
 
     @PostMapping("/create")
-    public tagDTO createTag(@RequestBody tagDTO tagDtoInput) {
-        Tag createdTag = tagService.createTag(tagDtoInput);
-        return mapToDTO(createdTag);
+    public ResponseEntity<tagDTO> createTag(@RequestBody tagDTO tagDto) {
+        return ResponseEntity.ok(tagService.createTag(tagDto));
     }
 
     @PutMapping("/update/{id}")
-    public tagDTO updateTag(@RequestBody tagDTO tagDtoInput) {
-        Tag updatedTag = tagService.updateTag(tagDtoInput.getId(), tagDtoInput);
-
-        return mapToDTO(updatedTag);
+    public ResponseEntity<tagDTO> updateTag(@PathVariable Long id, @RequestBody tagDTO tagDto) {
+        return ResponseEntity.ok(tagService.updateTag(id, tagDto));
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTag(@RequestBody tagDTO tagDtoInput) {
-        tagService.deleteTag(tagDtoInput.getId());
+    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/get/{id}")
-    public tagDTO getTagById(@PathVariable Long id) {
-        Tag tagEntity = tagService.getTagById(id);
-        return mapToDTO(tagEntity);
+    public ResponseEntity<tagDTO> getTagById(@PathVariable Long id) {
+        return ResponseEntity.ok(tagService.getTagById(id));
     }
 
     @GetMapping("/get_all")
-    public List<tagDTO> getAllTags() {
-        List<Tag> listTags = tagService.getAllTags();
-        return listTags.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
-
-    private tagDTO mapToDTO(Tag tagEntity) {
-        if (tagEntity == null)
-            return null;
-
-        tagDTO dto = new tagDTO();
-        dto.setId(tagEntity.getId());
-        dto.setName(tagEntity.getName());
-        return dto;
+    public ResponseEntity<List<tagDTO>> getAllTags() {
+        return ResponseEntity.ok(tagService.getAllTags());
     }
 }

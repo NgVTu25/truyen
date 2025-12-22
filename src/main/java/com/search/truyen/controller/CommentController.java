@@ -1,34 +1,26 @@
 package com.search.truyen.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.search.truyen.dtos.CommentDTO;
-import com.search.truyen.model.entities.Comment;
 import com.search.truyen.service.CommentService;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
 public class CommentController {
-
     private final CommentService commentService;
 
     @PostMapping("/create")
     public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) {
-        Comment createdComment = commentService.createComment(commentDTO);
-        return ResponseEntity.ok(mapToDTO(createdComment));
+        return ResponseEntity.ok(commentService.createComment(commentDTO));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDTO) {
-        Comment updatedComment = commentService.updateComment(id, commentDTO);
-        return ResponseEntity.ok(mapToDTO(updatedComment));
+        return ResponseEntity.ok(commentService.updateComment(id, commentDTO));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -39,44 +31,28 @@ public class CommentController {
 
     @GetMapping("/get/{id}")
     public ResponseEntity<CommentDTO> getCommentById(@PathVariable Long id) {
-        Comment comment = commentService.getCommentById(id)
-                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
-        return ResponseEntity.ok(mapToDTO(comment));
+        return commentService.getCommentById(id)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
     }
 
     @GetMapping("/get_all")
     public ResponseEntity<List<CommentDTO>> getAllComments() {
-        List<Comment> comments = commentService.getAllComments();
-        List<CommentDTO> commentDTOs = comments.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(commentDTOs);
+        return ResponseEntity.ok(commentService.getAllComments());
     }
 
     @GetMapping("/story/{storyId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByStoryId(@PathVariable Long storyId) {
-        List<Comment> comments = commentService.getCommentsByStoryId(storyId);
-        List<CommentDTO> commentDTOs = comments.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(commentDTOs);
+        return ResponseEntity.ok(commentService.getCommentsByStoryId(storyId));
     }
 
     @GetMapping("/chapter/{chapterId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByChapterId(@PathVariable Long chapterId) {
-        List<Comment> comments = commentService.getCommentsByChapterId(chapterId);
-        List<CommentDTO> commentDTOs = comments.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(commentDTOs);
+        return ResponseEntity.ok(commentService.getCommentsByChapterId(chapterId));
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByUserId(@PathVariable Long userId) {
-        List<Comment> comments = commentService.getCommentsByUserId(userId);
-        List<CommentDTO> commentDTOs = comments.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(commentDTOs);
+        return ResponseEntity.ok(commentService.getCommentsByUserId(userId));
     }
 }
