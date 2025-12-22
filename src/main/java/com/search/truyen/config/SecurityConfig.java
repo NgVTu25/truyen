@@ -32,7 +32,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/register/**", "/api/user/login", "/api/user/register").permitAll()
-                        // Cho phép xem truyện mà không cần login (tuỳ chọn)
                         .requestMatchers("/api/stories/get/**", "/api/stories/get_all", "/api/stories/search").permitAll()
                         .anyRequest().authenticated()
                 )

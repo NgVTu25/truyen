@@ -30,10 +30,24 @@ public class Story {
 
     @OneToMany(mappedBy = "story", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
+    @Column(name = "view_count")
+    private Long viewCount = 0L;
 
-    @ManyToMany
-    @JoinTable(name = "Story_tag", joinColumns = @JoinColumn(name = "story_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @Column(name = "status")
+    private String status; // ONGOING, COMPLETED
+
+    @Column(name = "slug", unique = true)
+    private String slug;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "story_tags",
+            joinColumns = @JoinColumn(name = "story_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tags;
+
+
 
     @Column(name = "cover_image")
     private String coverImage;

@@ -1,5 +1,7 @@
 package com.search.truyen.service;
 
+import com.search.truyen.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
@@ -13,22 +15,18 @@ import com.search.truyen.repository.tag_logRepository;
 @RequiredArgsConstructor
 public class Tag_logService {
     private final tag_logRepository tag_logRepository;
+    private final ModelMapper modelMapper;
 
     public Tag_log createTag_log(TaglogDTO tag_log) {
         Tag_log tag_logEntity = new Tag_log();
-        tag_logEntity.setStory(tag_log.getStory());
-        tag_logEntity.setSummary(tag_log.getSummary());
-        tag_logEntity.setGenerated_tag(tag_log.getGenerated_tag());
+        modelMapper.map(tag_log, tag_logEntity);
         return tag_logRepository.save(tag_logEntity);
     }
 
     public Tag_log updateTag_log(TaglogDTO tag_log) {
         Tag_log tag_logEntity = tag_logRepository.findById(tag_log.getId())
                 .orElseThrow(() -> new RuntimeException("Tag_log not found with id: " + tag_log.getId()));
-
-        tag_logEntity.setStory(tag_log.getStory());
-        tag_logEntity.setSummary(tag_log.getSummary());
-        tag_logEntity.setGenerated_tag(tag_log.getGenerated_tag());
+        modelMapper.map(tag_log, tag_logEntity);
         return tag_logRepository.save(tag_logEntity);
     }
 

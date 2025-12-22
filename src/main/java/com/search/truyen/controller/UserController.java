@@ -15,6 +15,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -25,10 +27,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/name/{username}")
-    public ResponseEntity<User> getUserByName(@PathVariable("username") String username) {
-        return userService.getUserByName(username)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<List<User>> getUserByName(@PathVariable("username") String username) {
+        return ResponseEntity.ok(userService.getUserByName(username));
     }
 
     @GetMapping("/id/{id}")

@@ -3,6 +3,7 @@ package com.search.truyen.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.search.truyen.dtos.HistoryDTO;
@@ -25,6 +26,7 @@ public class HistoryService {
     private final UserRepository userRepository;
     private final storyRepository storyRepository;
     private final ChapterRepository chapterRepository;
+    private final ModelMapper modelMapper;
 
     public History createOrUpdateHistory(HistoryDTO historyDTO) {
         User user = userRepository.findById(historyDTO.getUserId())
@@ -36,24 +38,17 @@ public class HistoryService {
         Chapter chapter = chapterRepository.findById(historyDTO.getChapterId())
                 .orElseThrow(() -> new RuntimeException("Chapter not found with id: " + historyDTO.getChapterId()));
 
-        // Tìm xem đã có history cho user và story này chưa
         Optional<History> existingHistory = historyRepository.findByUserIdAndStoryId(
                 historyDTO.getUserId(), historyDTO.getStoryId());
 
-        History history;
+        History history = new History();
         if (existingHistory.isPresent()) {
-            // Update existing history
             history = existingHistory.get();
             history.setChapter(chapter);
             history.setLastPage(historyDTO.getLastPage());
         } else {
             // Create new history
-            history = History.builder()
-                    .user(user)
-                    .story(story)
-                    .chapter(chapter)
-                    .lastPage(historyDTO.getLastPage())
-                    .build();
+            modelMapper.map(historyDTO, history);
         }
 
         return historyRepository.save(history);

@@ -79,28 +79,4 @@ public class CommentController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(commentDTOs);
     }
-
-    private CommentDTO mapToDTO(Comment comment) {
-        if (comment == null) {
-            return null;
-        }
-
-        CommentDTO dto = new CommentDTO();
-        dto.setId(comment.getId());
-        dto.setContent(comment.getContent());
-
-        if (comment.getStory() != null) {
-            dto.setStoryId(comment.getStory().getId());
-        }
-
-        if (comment.getChapter() != null) {
-            dto.setChapterId(comment.getChapter().getId());
-        }
-
-        if (comment.getUser() != null) {
-            dto.setUserId(comment.getUser().getId());
-        }
-
-        return dto;
-    }
 }

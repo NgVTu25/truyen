@@ -8,9 +8,11 @@ import com.search.truyen.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,16 +22,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public User createUser(userDTO userDTO) {
         User user = new User();
-        user.setUsername(userDTO.getUsername());
-        user.setEmail(userDTO.getEmail());
-        user.setRole(Userrole.valueOf(userDTO.getRole()));
-
+        modelMapper.map(userDTO, user);
         if (userDTO.getPassword() != null) {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-            user.setPasswordHash(encodedPassword);
+            user.setPassword(encodedPassword);
         }
         return userRepository.save(user);
     }
@@ -46,7 +46,7 @@ public class UserService {
         return Optional.empty();
     }
 
-    public Optional<User> getUserByName(String username) {
+    public List<User> getUserByName(String username) {
         return userRepository.findByUsernameContainingIgnoreCase(username);
     }
 

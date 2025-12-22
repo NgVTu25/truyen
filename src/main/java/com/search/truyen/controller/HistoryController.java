@@ -73,28 +73,4 @@ public class HistoryController {
                 .orElseThrow(() -> new RuntimeException("History not found"));
         return ResponseEntity.ok(mapToDTO(history));
     }
-
-    private HistoryDTO mapToDTO(History history) {
-        if (history == null) {
-            return null;
-        }
-
-        HistoryDTO dto = new HistoryDTO();
-        dto.setId(history.getId());
-        dto.setLastPage(history.getLastPage());
-
-        if (history.getUser() != null) {
-            dto.setUserId(history.getUser().getId());
-        }
-
-        if (history.getStory() != null) {
-            dto.setStoryId(history.getStory().getId());
-        }
-
-        if (history.getChapter() != null) {
-            dto.setChapterId(history.getChapter().getId());
-        }
-
-        return dto;
-    }
 }

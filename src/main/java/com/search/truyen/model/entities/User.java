@@ -32,6 +32,15 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(name = "status")
+    private String status;
+
     @JsonIgnore
     @Column(name = "password_hash", nullable = false)
     private String password;

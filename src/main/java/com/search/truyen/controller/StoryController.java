@@ -1,8 +1,6 @@
 package com.search.truyen.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,16 +27,7 @@ public class StoryController {
     public ResponseEntity<storyDTO> updateStory(@PathVariable Long id, @RequestBody storyDTO storyDto) {
         Story story = storyService.getStoryById(id)
                 .orElseThrow(() -> new RuntimeException("Story not found with id: " + id));
-
-        // Update fields
-        story.setTitle(storyDto.getTitle());
-        story.setDescription(storyDto.getDescription());
-        story.setChapters(storyDto.getChapters());
-        story.setTags(storyDto.getTags());
-        story.setCoverImage(storyDto.getCoverImage());
-        story.setType(storyDto.getType());
-
-        Story updatedStory = storyService.updateStory(story);
+        Story updatedStory = storyService.updateStory(id, storyDto);
         return ResponseEntity.ok(mapToDTO(updatedStory));
     }
 
@@ -63,12 +52,15 @@ public class StoryController {
     }
 
     @GetMapping("/get_all")
-    public ResponseEntity<List<storyDTO>> getAllStories() {
-        List<Story> stories = storyService.getAllStories();
-        List<storyDTO> storyDTOs = stories.stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(storyDTOs);
+    public ResponseEntity<Page<storyDTO>> getAllStories(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<Story> storyPage = storyService.getAllStories(page, size);
+
+        Page<storyDTO> dtoPage = storyPage.map(this::mapToDTO);
+
+        return ResponseEntity.ok(dtoPage);
     }
 
     private storyDTO mapToDTO(Story story) {

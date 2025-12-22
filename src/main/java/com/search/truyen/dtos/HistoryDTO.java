@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class HistoryDTO {
 
-    private Long id;
-
     private Long userId;
 
     private Long storyId;

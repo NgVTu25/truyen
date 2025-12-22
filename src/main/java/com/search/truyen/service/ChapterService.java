@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.search.truyen.dtos.ChapterDTO;
@@ -46,6 +50,11 @@ public class ChapterService {
         }
 
         return chapterRepository.save(existingChapter);
+    }
+
+    public Page<Chapter> getChaptersByStoryId(Long storyId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("chapterNumber").ascending());
+        return chapterRepository.findByStoryId(storyId, pageable);
     }
 
     public void deleteChapter(Long id) {

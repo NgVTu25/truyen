@@ -3,6 +3,7 @@ package com.search.truyen.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.search.truyen.dtos.CommentDTO;
@@ -25,6 +26,7 @@ public class CommentService {
     private final storyRepository storyRepository;
     private final ChapterRepository chapterRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     public Comment createComment(CommentDTO commentDTO) {
         Story story = storyRepository.findById(commentDTO.getStoryId())
@@ -39,7 +41,6 @@ public class CommentService {
                 .content(commentDTO.getContent())
                 .build();
 
-        // Chapter là optional
         if (commentDTO.getChapterId() != null) {
             Chapter chapter = chapterRepository.findById(commentDTO.getChapterId())
                     .orElseThrow(() -> new RuntimeException("Chapter not found with id: " + commentDTO.getChapterId()));
@@ -52,9 +53,7 @@ public class CommentService {
     public Comment updateComment(Long id, CommentDTO commentDTO) {
         Comment existingComment = commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
-
-        existingComment.setContent(commentDTO.getContent());
-
+        modelMapper.map(commentDTO, existingComment);
         return commentRepository.save(existingComment);
     }
 
